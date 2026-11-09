@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -9,61 +9,281 @@
     <meta name="theme-color" content="#0f172a">
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen font-sans antialiased pb-20">
+    
+    <!-- CABEÇALHO -->
     <header class="bg-slate-800 p-4 shadow-md sticky top-0 z-10 flex justify-between items-center">
-        <h1 class="text-xl font-bold text-blue-400">Dia 4: Lower</h1>
+        <h1 id="titulo-cabecalho" class="text-xl font-bold text-blue-400">Workout Tracker</h1>
+        <button id="btn-voltar" class="text-slate-400 hover:text-white hidden" onclick="voltarMenu()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        </button>
     </header>
 
     <main class="max-w-md mx-auto p-4 space-y-6">
-        <section class="bg-slate-800 rounded-xl overflow-hidden shadow-lg border border-slate-700">
-            <div class="bg-slate-950 aspect-video relative flex items-center justify-center">
-                <video src="" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-80"></video>
-                <span class="text-slate-500 text-sm z-10">Espaço do Vídeo (MP4)</span>
-            </div>
-
-            <div class="p-5">
-                <h2 class="text-2xl font-bold mb-1">Agachamento no Smith</h2>
-                <p class="text-sm text-slate-400 mb-4">Músculo Alvo: Quadríceps / Glúteos</p>
-
-                <div class="bg-slate-700/50 rounded-lg p-3 mb-6 flex justify-between items-center border border-slate-600/50">
-                    <span class="text-sm text-slate-300">Último Treino:</span>
-                    <span class="font-mono font-bold text-blue-400">40kg × 10 reps</span>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Carga (kg)</label>
-                        <input type="number" inputmode="decimal" placeholder="0" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-center text-xl font-bold text-white outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Repetições</label>
-                        <input type="number" inputmode="numeric" placeholder="0" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-center text-xl font-bold text-white outline-none focus:border-blue-500">
-                    </div>
-                </div>
-
-                <button class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-lg shadow-lg">
-                    Registrar Série 1
-                </button>
+        
+        <!-- ECRÃ 1: SELEÇÃO DO TREINO (MENU) -->
+        <section id="tela-selecao" class="space-y-4">
+            <h2 class="text-lg font-semibold text-slate-300 mb-4">Selecione o Treino de Hoje:</h2>
+            <div id="lista-treinos" class="grid gap-3">
+                <!-- Botões gerados via JS -->
             </div>
         </section>
 
-        <section class="px-2">
-            <h3 class="text-sm font-semibold text-slate-400 uppercase mb-3">Séries de Hoje</h3>
-            <ul class="space-y-2">
-                <li class="bg-slate-800 rounded-lg p-3 flex justify-between items-center border border-slate-700 opacity-60">
-                    <span class="text-slate-400 font-medium">Série 1</span>
-                    <div class="font-mono text-slate-300">
-                        <span class="font-bold text-white">40</span>kg × <span class="font-bold text-white">12</span>
+        <!-- ECRÃ 2: SESSÃO DE TREINO ATIVA -->
+        <section id="tela-treino" class="hidden space-y-6">
+            <div class="bg-slate-800 rounded-xl overflow-hidden shadow-lg border border-slate-700">
+                <div class="bg-slate-950 aspect-video relative flex items-center justify-center">
+                    <span class="text-slate-500 text-sm z-10">Vídeo (MP4)</span>
+                </div>
+
+                <div class="p-5">
+                    <div class="flex justify-between items-start mb-1">
+                        <h2 id="exercicio-nome" class="text-2xl font-bold">Nome do Exercício</h2>
+                        <span id="exercicio-progresso" class="text-sm font-bold text-blue-500 bg-blue-500/10 px-2 py-1 rounded">1/6</span>
                     </div>
-                </li>
-            </ul>
+                    <p id="exercicio-meta" class="text-sm text-slate-400 mb-4">Meta: 3 × 8-10</p>
+
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Carga (kg)</label>
+                            <input id="input-carga" type="number" inputmode="decimal" placeholder="0" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-center text-xl font-bold text-white outline-none focus:border-blue-500 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Repetições</label>
+                            <input id="input-reps" type="number" inputmode="numeric" placeholder="0" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-center text-xl font-bold text-white outline-none focus:border-blue-500 transition-all">
+                        </div>
+                    </div>
+
+                    <button id="btn-registrar" onclick="registrarSerie()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-lg shadow-lg shadow-blue-500/30 transition-all active:scale-95">
+                        Registar Série <span id="num-serie-atual">1</span>
+                    </button>
+                    
+                    <button id="btn-proximo-exercicio" onclick="avancarExercicio()" class="hidden w-full bg-green-600 hover:bg-green-500 text-white font-bold py-4 rounded-lg shadow-lg shadow-green-500/30 transition-all active:scale-95">
+                        Próximo Exercício
+                    </button>
+                </div>
+            </div>
+
+            <section class="px-2">
+                <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Séries Registadas</h3>
+                <ul id="lista-series" class="space-y-2">
+                    <!-- Séries registadas aparecem aqui -->
+                </ul>
+            </section>
         </section>
     </main>
 
     <script>
+        // BASE DE DADOS DOS TREINOS (Fichas completas)
+        const rotinaSemanal = [
+            {
+                id: "push", nome: "PUSH", 
+                exercicios: [
+                    { nome: "Supino com Halteres", meta: "3 × 8-10" },
+                    { nome: "Desenvolvimento na Máquina", meta: "3 × 8-10" },
+                    { nome: "Crucifixo com Halteres", meta: "3 × 8-10" },
+                    { nome: "Elevação Lateral", meta: "3 × 8-10" },
+                    { nome: "Tríceps Francês no Cabo", meta: "3 × 8-10" },
+                    { nome: "Elevação de Pernas", meta: "3 × 8-10" }
+                ]
+            },
+            {
+                id: "pull", nome: "PULL",
+                exercicios: [
+                    { nome: "Puxada Aberta", meta: "3 × 8-10" },
+                    { nome: "Pull Down", meta: "3 × 8-10" },
+                    { nome: "Remada Baixa", meta: "3 × 8-10" },
+                    { nome: "Crucifixo Inverso", meta: "3 × 8-10" },
+                    { nome: "Encolhimento no Smith", meta: "3 × 8-10" },
+                    { nome: "Rosca Scott na Máquina", meta: "3 × 8-10" }
+                ]
+            },
+            {
+                id: "pernas", nome: "PERNAS",
+                exercicios: [
+                    { nome: "Leg Press", meta: "3 × 8-10" },
+                    { nome: "Cadeira Flexora", meta: "3 × 8-10" },
+                    { nome: "Agachamento Búlgaro", meta: "3 × 8-10" },
+                    { nome: "Cadeira Extensora", meta: "3 × 8-10" },
+                    { nome: "Cadeira Adutora", meta: "3 × 8-10" },
+                    { nome: "Cadeira Abdutora", meta: "3 × 8-10" },
+                    { nome: "Panturrilha em Pé", meta: "3 × 8-10" }
+                ]
+            },
+            {
+                id: "upper", nome: "UPPER",
+                exercicios: [
+                    { nome: "Supino Inclinado com Halteres", meta: "3 × 8-10" },
+                    { nome: "Peck Deck", meta: "3 × 8-10" },
+                    { nome: "Puxada Alta", meta: "3 × 8-10" },
+                    { nome: "Elevação Lateral", meta: "3 × 8-10" },
+                    { nome: "Remada no Smith", meta: "3 × 8-10" },
+                    { nome: "Tríceps Francês", meta: "3 × 8-10" },
+                    { nome: "Rosca Martelo", meta: "3 × 8-10" }
+                ]
+            },
+            {
+                id: "lower", nome: "LOWER",
+                exercicios: [
+                    { nome: "Mesa Flexora", meta: "3 × 8-10" },
+                    { nome: "Agachamento no Smith", meta: "3 × 8-10" },
+                    { nome: "Stiff", meta: "3 × 8-10" },
+                    { nome: "Cadeira Extensora", meta: "3 × 8-10" },
+                    { nome: "Panturrilha em Pé", meta: "3 × 8-10" },
+                    { nome: "Agachamento no Smith (Variação)", meta: "3 × 8-10" }
+                ]
+            }
+        ];
+
+        // VARIÁVEIS DE ESTADO
+        let treinoAtual = null;
+        let exercicioIndex = 0;
+        let serieAtual = 1;
+        const totalSeriesPorExercicio = 3;
+
+        // INICIALIZAÇÃO DA INTERFACE
+        document.addEventListener("DOMContentLoaded", () => {
+            const listaDiv = document.getElementById("lista-treinos");
+            rotinaSemanal.forEach(treino => {
+                const btn = document.createElement("button");
+                btn.className = "w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left p-4 rounded-xl shadow font-bold text-lg text-blue-400 transition-colors flex justify-between";
+                btn.innerHTML = `<span>${treino.nome}</span> <span class="text-sm text-slate-500 font-normal">${treino.exercicios.length} exercícios</span>`;
+                btn.onclick = () => iniciarTreino(treino.id);
+                listaDiv.appendChild(btn);
+            });
+        });
+
+        function iniciarTreino(id) {
+            treinoAtual = rotinaSemanal.find(t => t.id === id);
+            exercicioIndex = 0;
+            serieAtual = 1;
+            
+            document.getElementById("tela-selecao").classList.add("hidden");
+            document.getElementById("tela-treino").classList.remove("hidden");
+            document.getElementById("btn-voltar").classList.remove("hidden");
+            document.getElementById("titulo-cabecalho").innerText = `Dia: ${treinoAtual.nome}`;
+            
+            renderizarExercicio();
+        }
+
+        function renderizarExercicio() {
+            const ex = treinoAtual.exercicios[exercicioIndex];
+            
+            document.getElementById("exercicio-nome").innerText = ex.nome;
+            document.getElementById("exercicio-meta").innerText = `Meta: ${ex.meta}`;
+            document.getElementById("exercicio-progresso").innerText = `${exercicioIndex + 1}/${treinoAtual.exercicios.length}`;
+            
+            document.getElementById("input-carga").value = "";
+            document.getElementById("input-reps").value = "";
+            
+            document.getElementById("lista-series").innerHTML = ""; // Limpa visualmente as séries
+            serieAtual = 1;
+            
+            atualizarBotoes();
+            carregarSeriesSalvas();
+        }
+
+        function registrarSerie() {
+            const carga = document.getElementById("input-carga").value;
+            const reps = document.getElementById("input-reps").value;
+
+            if (!carga || !reps) {
+                alert("Preencha a carga e as repetições!");
+                return;
+            }
+
+            const ex = treinoAtual.exercicios[exercicioIndex];
+            const dataRegistro = { carga, reps, serie: serieAtual, data: new Date().toISOString() };
+            
+            // Grava no LocalStorage (Funciona Offline)
+            const chaveKey = `treino_${treinoAtual.id}_${ex.nome}`;
+            let historico = JSON.parse(localStorage.getItem(chaveKey)) || [];
+            historico.push(dataRegistro);
+            localStorage.setItem(chaveKey, JSON.stringify(historico));
+
+            adicionarSerieNaTela(serieAtual, carga, reps);
+            serieAtual++;
+            
+            document.getElementById("input-carga").value = "";
+            document.getElementById("input-reps").value = "";
+            
+            atualizarBotoes();
+        }
+
+        function adicionarSerieNaTela(serie, carga, reps) {
+            const ul = document.getElementById("lista-series");
+            const li = document.createElement("li");
+            li.className = "bg-slate-800 rounded-lg p-3 flex justify-between items-center border border-slate-700 bg-opacity-60";
+            li.innerHTML = `
+                <span class="text-slate-400 font-medium">Série ${serie}</span>
+                <div class="font-mono text-slate-300">
+                    <span class="font-bold text-white">${carga}</span>kg × <span class="font-bold text-white">${reps}</span>
+                </div>
+            `;
+            ul.appendChild(li);
+        }
+
+        function atualizarBotoes() {
+            const btnRegistrar = document.getElementById("btn-registrar");
+            const btnProximo = document.getElementById("btn-proximo-exercicio");
+            const textNumSerie = document.getElementById("num-serie-atual");
+
+            if (serieAtual <= totalSeriesPorExercicio) {
+                btnRegistrar.classList.remove("hidden");
+                btnProximo.classList.add("hidden");
+                textNumSerie.innerText = serieAtual;
+            } else {
+                btnRegistrar.classList.add("hidden");
+                
+                // Se for o último exercício do treino, finaliza
+                if (exercicioIndex === treinoAtual.exercicios.length - 1) {
+                    btnProximo.innerText = "Finalizar Treino";
+                    btnProximo.classList.remove("hidden");
+                    btnProximo.onclick = voltarMenu;
+                } else {
+                    btnProximo.innerText = "Próximo Exercício";
+                    btnProximo.classList.remove("hidden");
+                    btnProximo.onclick = avancarExercicio;
+                }
+            }
+        }
+
+        function avancarExercicio() {
+            if (exercicioIndex < treinoAtual.exercicios.length - 1) {
+                exercicioIndex++;
+                renderizarExercicio();
+            }
+        }
+
+        function carregarSeriesSalvas() {
+            const ex = treinoAtual.exercicios[exercicioIndex];
+            const chaveKey = `treino_${treinoAtual.id}_${ex.nome}`;
+            let historico = JSON.parse(localStorage.getItem(chaveKey)) || [];
+            
+            // Apenas para não poluir o ecrã caso o utilizador repita o mesmo treino depois. 
+            // Numa implementação SQL futura, filtraríamos pela data de hoje.
+            // Aqui carregamos apenas se houver algo gravado hoje.
+            const hoje = new Date().toDateString();
+            historico = historico.filter(reg => new Date(reg.data).toDateString() === hoje);
+
+            historico.forEach(reg => {
+                adicionarSerieNaTela(reg.serie, reg.carga, reg.reps);
+                serieAtual = reg.serie + 1;
+            });
+            atualizarBotoes();
+        }
+
+        function voltarMenu() {
+            document.getElementById("tela-selecao").classList.remove("hidden");
+            document.getElementById("tela-treino").classList.add("hidden");
+            document.getElementById("btn-voltar").classList.add("hidden");
+            document.getElementById("titulo-cabecalho").innerText = "Workout Tracker";
+            treinoAtual = null;
+        }
+        
+        // PWA Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .catch(err => console.error('Erro no SW:', err));
+                navigator.serviceWorker.register('./sw.js').catch(err => console.error('Erro no SW:', err));
             });
         }
     </script>
